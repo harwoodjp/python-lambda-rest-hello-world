@@ -1,5 +1,5 @@
 {
   "resource": "/hello",
-  "path": "/hello",
+  "path": "/hello/Justin",
   "httpMethod": "GET"
 }

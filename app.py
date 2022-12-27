@@ -4,11 +4,11 @@ app = APIGatewayRestResolver()
 
 @app.get("/hello")
 def hello():
-    return {"message": "Hello!"}
+    return {"message": "Hola!"}
 
 @app.get("/hello/<name>")
 def hello_name(name):
-    return {"message": f"Hello, {name}!"}
+    return {"message": f"Hola, {name}!"}
 
 def handler(event, context):
     return app.resolve(event, context)

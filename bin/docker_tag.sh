@@ -1,0 +1,1 @@
+docker tag hello-world:latest $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/hello-world:latest
