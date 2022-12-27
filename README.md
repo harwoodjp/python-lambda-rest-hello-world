@@ -1,7 +1,11 @@
 
 How to create a (testable, monitorable) Python REST API with Lambda and Docker using [AWS Lambda Powertools](https://awslabs.github.io/aws-lambda-powertools-python/2.5.0/). 
 
-### Resources
+### Prerequisites
+* Install and configure `aws` CLI
+* Execute `bin/aws_ecr_docker_login.sh` to register Docker with ECR
+
+### AWS resources
 * Preferably use infra-as-code solution like [Terraform](https://registry.terraform.io/providers/hashicorp/aws/latest/docs) or [CloudFormation](https://aws.amazon.com/cloudformation/) to describe/apply application resources
 * AWS components:
   * ECR repo for Lambda images
@@ -13,7 +17,8 @@ How to create a (testable, monitorable) Python REST API with Lambda and Docker u
   		* Integration type: Lambda Function Proxy
   		* Select Lambda Function
 
-###  Commands/workflow
+
+### Commands/workflow
 * Build `hello-world`
   * `docker build -t hello-world .`
   * Run this after making code changes
