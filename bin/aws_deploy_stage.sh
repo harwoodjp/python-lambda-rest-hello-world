@@ -1,3 +1,4 @@
- aws apigateway create-deployment --region us-east-1 \
-    --rest-api-id [API ID] \
-    --stage-name prod
+ aws apigateway create-deployment \
+   --region $AWS_REGION \
+   --rest-api-id $AWS_REST_API_ID \
+   --stage-name $AWS_REST_API_STAGE
