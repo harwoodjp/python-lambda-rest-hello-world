@@ -1,1 +1,1 @@
-docker run -p 9000:8080 hello-world
+docker run -p 9000:8080 -p 6900:6900 --name hello-world hello-world

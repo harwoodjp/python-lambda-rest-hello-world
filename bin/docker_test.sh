@@ -1,0 +1,1 @@
+docker exec -it hello-world sh -c "pytest test.py"
