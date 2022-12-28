@@ -19,4 +19,4 @@ services:
       - "9001:8080"
       - "6900:6900"
     volumes:
-      - ./functions/string-reverser:/var/task      
+      - ./functions/string-reverser:/var/task
