@@ -8,7 +8,6 @@ def test_handler():
 	  "httpMethod": "GET"
   }
 	response = handler(event, None)
-	import pudb; pu.db
 	body = json.loads(response.get("body"))
 	result = body.get("message")
 	assert result == "Hola, Justin!"
