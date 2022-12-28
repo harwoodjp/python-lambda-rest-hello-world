@@ -29,11 +29,9 @@ How to create a (testable, monitorable) Python REST API with Lambda and Docker u
 
 ### Commands/workflow
 * Build `hello-world`
-  * `docker build -t hello-world .`
-  * Run this after making code changes
+  * `docker-compose build`
 * Run `hello-world`
-  * `docker run -p 9000:8080 hello-world`  
-  * `docker run -p 9000:8080 -p 6900:6900 hello-world` (`pudb` debugging)
+  * `docker-compose up --build`  
 * Tag `hello-world:latest`
   * `docker tag hello-world:latest [ACCOUNT ID].dkr.ecr.us-east-1.amazonaws.com/hello-world:latest`
 * Push to ECR

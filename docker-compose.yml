@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  hello-world:
+    build: .
+    image: hello-world:latest
+    container_name: hello-world    
+    working_dir: /var/task
+    ports:
+      - "9000:8080"
+      - "6900:6900"
+    volumes:
+      - .:/var/task

@@ -7,13 +7,13 @@ app = APIGatewayRestResolver()
 
 @app.get("/hello")
 def hello() -> dict:
-    response = {"message": "Salut!" }
+    response = {"message": "Hola!" }
     logger.info(response)
     return response
 
 @app.get("/hello/<name>")
 def hello_name(name: str) -> dict:
-    response = {"message": f"Salut, {name}!"}
+    response = {"message": f"Hola, {name}!"}
     logger.info(response)
     return response
 
