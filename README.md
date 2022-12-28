@@ -32,30 +32,30 @@ How to create a (testable, monitorable) Python REST API with Lambda and Docker u
 * Build image and run container
   * ```
     docker-compose up --build  
-  ```
+    ```
 * Tag image with ECR URL
   * ```
     docker tag [FUNCTION NAME]:latest \
     [ACCOUNT ID].dkr.ecr.us-east-1.amazonaws.com/[FUNCTION NAME]:latest
-  ```
+    ```
 * Push image to ECR
   * ```
     docker push [ACCOUNT ID].dkr.ecr.us-east-1.amazonaws.com/[FUNCTION NAME]:latest
-  ```
+    ```
 
 * Refresh Lambda with latest image
 	* ```
-		aws lambda update-function-code \
-	    --function-name [FUNCTION NAME] \
-	    --image-uri [ACCOUNT ID].dkr.ecr.us-east-1.amazonaws.com/string-reverser:latest
-		```
+    	aws lambda update-function-code \
+        --function-name [FUNCTION NAME] \
+        --image-uri [ACCOUNT ID].dkr.ecr.us-east-1.amazonaws.com/string-reverser:latest
+      ```
 * Deploy API to API Gateway Stage
-	* ```
-	 aws apigateway create-deployment \
+	* ``` 
+	    aws apigateway create-deployment \
 	   --region [AWS REGION] \
 	   --rest-api-id [AWS REST API ID] \
 	   --stage-name [AWS REST API STAGE NAME]
-	```
+       ```
 
 ### Testing
 * Run unit tests
