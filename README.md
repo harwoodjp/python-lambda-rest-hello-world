@@ -14,7 +14,7 @@ How to create a (testable, monitorable) Python REST API with Lambda and Docker u
 | AWS_REST_API_ID    | API Gateway ID for your REST API              |
 | AWS_REST_API_STAGE | Name of stage your API will deploy to         |
 
-### Getting started
+### Initialize AWS resources
 * It's recommended to use infra-as-code solution like [Terraform](https://registry.terraform.io/providers/hashicorp/aws/latest/docs) or [CloudFormation](https://aws.amazon.com/cloudformation/) to describe/apply application (AWS) resources
 * We'll need to initialize AWS with appropriate components for our application:
 	* Create ECR [repository](https://us-east-1.console.aws.amazon.com/ecr/repositories) for your function
