@@ -14,54 +14,67 @@ How to create a (testable, monitorable) Python REST API with Lambda and Docker u
 | AWS_REST_API_ID    | API Gateway ID for your REST API              |
 | AWS_REST_API_STAGE | Name of stage your API will deploy to         |
 
-### AWS resources
-* Preferably use infra-as-code solution like [Terraform](https://registry.terraform.io/providers/hashicorp/aws/latest/docs) or [CloudFormation](https://aws.amazon.com/cloudformation/) to describe/apply application resources
-* AWS components:
-  * ECR repo for Lambda images
-  * Lambda sourced from latest image
-  * API Gateway
-  	* REST API
-  		* Create resource
-  		* Configure as proxy resource
-  		* Integration type: Lambda Function Proxy
-  		* Select Lambda Function
+### Getting started
+* It's recommended to use infra-as-code solution like [Terraform](https://registry.terraform.io/providers/hashicorp/aws/latest/docs) or [CloudFormation](https://aws.amazon.com/cloudformation/) to describe/apply application (AWS) resources
+* We'll need to initialize AWS with appropriate components for our application:
+	* Create ECR [repository](https://us-east-1.console.aws.amazon.com/ecr/repositories) for your function
+	* Push application image to your new ECR repository
+	* Create Lambda [function](https://us-east-1.console.aws.amazon.com/lambda/) with "Container image" option
+		* "Browse images", select the image you just pushed
+		* `arm64` architecture if you built the image on an M1 Mac 
+	* Create API Gateway [REST API](https://us-east-1.console.aws.amazon.com/apigateway/main/apis)
+		* Create resource
+		* Configure as proxy resource
+		* Integration type: Lambda Function Proxy
+		* Select your Lambda Function
 
+### Development workflow
+* Build image and run container
+  * ```
+    docker-compose up --build  
+  ```
+* Tag image with ECR URL
+  * ```
+    docker tag [FUNCTION NAME]:latest \
+    [ACCOUNT ID].dkr.ecr.us-east-1.amazonaws.com/[FUNCTION NAME]:latest
+  ```
+* Push image to ECR
+  * ```
+    docker push [ACCOUNT ID].dkr.ecr.us-east-1.amazonaws.com/[FUNCTION NAME]:latest
+  ```
 
-### Commands/workflow
-* Build `hello-world`
-  * `docker-compose build`
-* Run `hello-world`
-  * `docker-compose up --build`  
-* Tag `hello-world:latest`
-  * `docker tag hello-world:latest [ACCOUNT ID].dkr.ecr.us-east-1.amazonaws.com/hello-world:latest`
-* Push to ECR
-  * `docker push [ACCOUNT ID].dkr.ecr.us-east-1.amazonaws.com/hello-world:latest`
 * Refresh Lambda with latest image
-	* `aws lambda update-function-code --function-name [LAMBDA NAME/ARN] --image-uri [ACCOUNT ID].dkr.ecr.us-east-1.amazonaws.com/hello-world:latest`
-* Deploy API to Stage `prod`
-	* `aws apigateway create-deployment --region us-east-1 --rest-api-id [API ID] --stage-name prod`
+	* ```
+		aws lambda update-function-code \
+	    --function-name [FUNCTION NAME] \
+	    --image-uri [ACCOUNT ID].dkr.ecr.us-east-1.amazonaws.com/string-reverser:latest
+		```
+* Deploy API to API Gateway Stage
+	* ```
+	 aws apigateway create-deployment \
+	   --region [AWS REGION] \
+	   --rest-api-id [AWS REST API ID] \
+	   --stage-name [AWS REST API STAGE NAME]
+	```
 
 ### Testing
-* Unit tests
+* Run unit tests
 	* `pytest` for assertions/coverage
-	* `docker exec -it hello-world sh -c "pytest test.py"`
-* Requests
+	* `docker exec -it [FUNCTION NAME] sh -c "pytest test.py"`
+* Invoke HTTP event (request) locally with [RIE](https://docs.aws.amazon.com/lambda/latest/dg/images-test.html)
 	* curl: `bin/request_local.sh`
 	* Event body: `bin/request_local_body.json`
 * Tip: use method injection (S3, Dynamo, MySQL, etc. clients) for easy mocking (`unittest.Mock`)
 
 ### Debugging
-* Local
-	* `pudb` visual debugger (breakpoints, etc.)
-		* From e.g. test context:
-			* `import pudb; pu.db` or `pu.db`
-		* From container:
-			* Use this when debugging invocation via Postman, curl, etc. 
-			* `from pudb.remote import set_trace; set_trace(term_size=(160, 40), host='0.0.0.0', port=6900)`
-			* `telnet 127.0.0.1 6900` 
-* Production
-	* Run requests against endpoint URL provided by API Gateway Stage
+* We can set breakpoints, watches, and step through code with [`pudb`](https://pypi.org/project/pudb/)
+* Debug unit tests
+	* `import pudb; pu.db` or `pu.db`
+* Debug RIE invocations
+	* Use this when sending requests via Postman, curl, etc. 
+	* `from pudb.remote import set_trace; set_trace(term_size=(160, 40), host='0.0.0.0', port=6900)`
+	* `telnet 127.0.0.1 6900` 
 
 ### Monitoring
 * Use `aws_lambda_powertools.Logger` for CloudWatch integration
-* Tail production logs with `aws logs tail "/aws/lambda/[LAMBDA NAME]" --follow`
+* Tail production logs with `aws logs tail "/aws/lambda/[FUNCTION NAME]" --follow`

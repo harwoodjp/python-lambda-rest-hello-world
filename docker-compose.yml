@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   hello-world:
-    build: .
+    build: functions/hello-world/
     image: hello-world:latest
     container_name: hello-world    
     working_dir: /var/task
@@ -9,4 +9,14 @@ services:
       - "9000:8080"
       - "6900:6900"
     volumes:
-      - .:/var/task
+      - ./functions/hello-world:/var/task
+  string-reverser:
+    build: functions/string-reverser/
+    image: string-reverser:latest
+    container_name: string-reverser    
+    working_dir: /var/task
+    ports:
+      - "9001:8080"
+      - "6900:6900"
+    volumes:
+      - ./functions/string-reverser:/var/task      
