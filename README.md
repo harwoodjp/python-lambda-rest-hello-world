@@ -69,7 +69,7 @@ How to create a (testable, monitorable) Python REST API with Lambda and Docker u
 ### Debugging
 * We can set breakpoints, watches, and step through code with [`pudb`](https://pypi.org/project/pudb/)
 * Debug unit tests
-	* `import pudb; pu.db` or `pu.db`
+	* `import pudb; pu.db`
 * Debug RIE invocations
 	* Use this when sending requests via Postman, curl, etc. 
 	* `from pudb.remote import set_trace; set_trace(term_size=(160, 40), host='0.0.0.0', port=6900)`
