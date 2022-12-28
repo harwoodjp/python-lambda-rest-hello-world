@@ -1,1 +1,2 @@
-docker exec -it hello-world bash
+# $1: FUNCTION NAME
+docker exec -it $1 sh
