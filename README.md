@@ -17,12 +17,12 @@ How to create a (testable, monitorable) Python REST API with Lambda and Docker u
 ### Initialize AWS resources
 * It's recommended to use infra-as-code solution like [Terraform](https://registry.terraform.io/providers/hashicorp/aws/latest/docs) or [CloudFormation](https://aws.amazon.com/cloudformation/) to describe/apply application (AWS) resources
 * We'll need to initialize AWS with appropriate components for our application:
-	* Create ECR [repository](https://us-east-1.console.aws.amazon.com/ecr/repositories) for your function
+	* Create [ECR](https://us-east-1.console.aws.amazon.com/ecr/repositories) repository for your function
 	* Push application image to your new ECR repository
-	* Create Lambda [function](https://us-east-1.console.aws.amazon.com/lambda/) with "Container image" option
+	* Create [Lambda](https://us-east-1.console.aws.amazon.com/lambda/) function with "Container image" option
 		* "Browse images", select the image you just pushed
 		* `arm64` architecture if you built the image on an M1 Mac 
-	* Create API Gateway [REST API](https://us-east-1.console.aws.amazon.com/apigateway/main/apis)
+	* Create [API Gateway](https://us-east-1.console.aws.amazon.com/apigateway/main/apis) REST API
 		* Create resource
 		* Configure as proxy resource
 		* Integration type: Lambda Function Proxy
