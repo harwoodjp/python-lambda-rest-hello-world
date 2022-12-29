@@ -1,8 +1,17 @@
 
 How to create a (testable, monitorable) Python REST API with Lambda, Docker, and Terraform. The example functions use [AWS Lambda Powertools](https://awslabs.github.io/aws-lambda-powertools-python/2.5.0/) for API Gateway and CloudWatch integration.
 
-### Prerequisites
+1. [Setup](#setup)
+2. [Terraform](#terraform)
+3. [Development](#development)
+4. [Testing](#testing)
+5. [Debugging](#debugging)
+6. [Monitoring](#monitoring)
+
+### Setup
+* Install and configure [Docker](https://docs.docker.com/desktop/install/mac-install/)
 * Install and configure the [`aws`](https://aws.amazon.com/cli) CLI
+* Install and configure [Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started) CLI
 * Execute the following to register Docker with ECR:
 	* ```
 	    aws ecr get-login-password \
@@ -10,7 +19,6 @@ How to create a (testable, monitorable) Python REST API with Lambda, Docker, and
 	    --username AWS \
 	    --password-stdin [ACCOUNT ID].dkr.ecr.us-east-1.amazonaws.com
 	    ```
-* Recommended: install and configure [Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started) CLI
 * For Terraform development, ensure the following environmental variables are in your path:
 
 | Variable               | Description                                   |
@@ -19,14 +27,14 @@ How to create a (testable, monitorable) Python REST API with Lambda, Docker, and
 | AWS_SECRET_ACCESS_KEY  | Secret key for Terraform development          |
 
 
-### Terraform/AWS initialization
+### Terraform
 * We're using the following AWS components:
 
 | Resource               | Description                                   |
 |------------------------|-----------------------------------------------|
 | IAM      | Roles/permissions for execution          |
-| [ECR](https://us-east-1.console.aws.amazon.com/ecr/repositories)  | Storage for Lambda images          |
-| [Lambda](https://us-east-1.console.aws.amazon.com/lambda/)  | Function/container from ECR image          |
+| [ECR](https://us-east-1.console.aws.amazon.com/ecr/repositories)  | Repository for Lambda images          |
+| [Lambda](https://us-east-1.console.aws.amazon.com/lambda/)  | Serverless function built from ECR image          |
 | [API Gateway](https://us-east-1.console.aws.amazon.com/apigateway/main/apis)  | Lambda proxy integration and stage          |
 
 * It's recommended to use infra-as-code solution like [Terraform](https://registry.terraform.io/providers/hashicorp/aws/latest/docs) to describe/apply application (AWS) resources, though I'll provide manual steps also
@@ -34,15 +42,15 @@ How to create a (testable, monitorable) Python REST API with Lambda, Docker, and
 	* Navigate to `terraform/` in the project root
 	* `cd` to a function folder and run `terraform init`
 	* Review `terraform plan`, then `terraform apply`
-	* The ECR repository we've created is empty, so you'll see `InvalidParameterValueException: [...] Provide a valid source image`:
+	* On first `apply`, the ECR repository is empty, so you'll see `InvalidParameterValueException: [...] Provide a valid source image`:
 	* Push an image to your new ECR repo and run `terraform apply` again
-	* All components should be created in your AWS environment now
+	* All components should be present in your AWS environment now
 * Or manually initialize components in AWS Console by doing the following:
 	* Create ECR repository for your function
 	* Push application image to your new ECR repository
 	* Create Lambda function with "Container image" option
 		* "Browse images", then select the image you just pushed
-		* `arm64` architecture if you built the image on an M1 Mac 
+		* `arm64` architecture if you built the image on a silicon Mac 
 	* Create API Gateway REST API
 		* Create resource
 		* Configure as proxy resource
@@ -50,34 +58,43 @@ How to create a (testable, monitorable) Python REST API with Lambda, Docker, and
 		* Select your Lambda Function
 	* Deploy API to Stage for production endpoint
 
-### Development workflow
-* Build image and run container
-  * ```
-    docker-compose up --build  
-    ```
-* Tag image with ECR URL
-  * ```
-    docker tag [FUNCTION NAME]:latest \
-    [ACCOUNT ID].dkr.ecr.us-east-1.amazonaws.com/[FUNCTION NAME]:latest
-    ```
-* Push image to ECR
-  * ```
-    docker push [ACCOUNT ID].dkr.ecr.us-east-1.amazonaws.com/[FUNCTION NAME]:latest
-    ```
-
-* Refresh Lambda with latest image
-	* ```
-    	aws lambda update-function-code \
-        --function-name [FUNCTION NAME] \
-        --image-uri [ACCOUNT ID].dkr.ecr.us-east-1.amazonaws.com/string-reverser:latest
-      ```
-* Deploy API to API Gateway Stage
-	* ``` 
-	    aws apigateway create-deployment \
-	   --region [REGION] \
-	   --rest-api-id [REST API ID] \
-	   --stage-name [REST API STAGE NAME]
-       ```
+### Development
+* Basic development workflow
+    * Start container
+	* Make modifications to function
+	* Test locally (via `pytest` and RIE requests)
+	* Build image
+	* Tag image
+	* Push to ECR
+	* Refresh Lambda with latest image
+	* Deploy API to stage
+* Commands (also in `bin/`)
+	* Build image and run container
+  	    * ```
+    	    docker-compose up --build  
+    	    ```
+	* Tag image with ECR URL
+	  * ```
+	    docker tag [FUNCTION NAME]:latest \
+	    [ACCOUNT ID].dkr.ecr.us-east-1.amazonaws.com/[FUNCTION NAME]:latest
+	    ```
+	* Push image to ECR
+	  * ```
+	    docker push [ACCOUNT ID].dkr.ecr.us-east-1.amazonaws.com/[FUNCTION NAME]:latest
+	    ```
+	* Refresh Lambda with latest image
+		* ```
+	    	aws lambda update-function-code \
+	        --function-name [FUNCTION NAME] \
+	        --image-uri [ACCOUNT ID].dkr.ecr.us-east-1.amazonaws.com/string-reverser:latest
+	      ```
+	* Deploy API to API Gateway Stage
+		* ``` 
+		    aws apigateway create-deployment \
+		   --region [REGION] \
+		   --rest-api-id [REST API ID] \
+		   --stage-name [REST API STAGE NAME]
+	       ```
 
 ### Testing
 * Run unit tests
