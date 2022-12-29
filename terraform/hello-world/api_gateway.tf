@@ -33,7 +33,7 @@ resource "aws_lambda_permission" "allow_api_gateway" {
   statement_id  = "AllowExecutionFromApiGateway"
   action        = "lambda:InvokeFunction"
   principal     = "apigateway.amazonaws.com"
-  source_arn = "${aws_api_gateway_rest_api.rest_api.execution_arn}/*/*/*"
+  source_arn    = "${aws_api_gateway_rest_api.rest_api.execution_arn}/*/*/*"
 
   depends_on = [
     aws_api_gateway_rest_api.rest_api,
