@@ -1,5 +1,5 @@
 
-How to create a (testable, monitorable) Python REST API with Lambda and Docker using [AWS Lambda Powertools](https://awslabs.github.io/aws-lambda-powertools-python/2.5.0/).
+How to create a (testable, monitorable) Python REST API with Lambda, Docker, and Terraform. The example functions use [AWS Lambda Powertools](https://awslabs.github.io/aws-lambda-powertools-python/2.5.0/) for API Gateway and CloudWatch integration.
 
 ### Prerequisites
 * Install and configure the [`aws`](https://aws.amazon.com/cli) CLI
@@ -10,29 +10,45 @@ How to create a (testable, monitorable) Python REST API with Lambda and Docker u
 	    --username AWS \
 	    --password-stdin [ACCOUNT ID].dkr.ecr.us-east-1.amazonaws.com
 	    ```
-* Ensure the following environmental variables are in your path:
+* Recommended: install and configure [Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started) CLI
+* For Terraform development, ensure the following environmental variables are in your path:
 
-| Variable           | Description                                   |
-|--------------------|-----------------------------------------------|
-| AWS_ACCOUNT_ID     | Account ID for AWS user                       |
-| AWS_FUNCTION_NAME  | Name of your Lambda function                  |
-| AWS_REGION         | Region your AWS resources are associated with |
-| AWS_REST_API_ID    | API Gateway ID for your REST API              |
-| AWS_REST_API_STAGE | Name of stage your API will deploy to         |
+| Variable               | Description                                   |
+|------------------------|-----------------------------------------------|
+| AWS_ACCESS_KEY_ID      | Access key for Terraform development          |
+| AWS_SECRET_ACCESS_KEY  | Secret key for Terraform development          |
 
-### Initialize AWS resources
-* It's recommended to use infra-as-code solution like [Terraform](https://registry.terraform.io/providers/hashicorp/aws/latest/docs) or [CloudFormation](https://aws.amazon.com/cloudformation/) to describe/apply application (AWS) resources
-* We'll need to initialize AWS with appropriate components for our application:
-	* Create [ECR](https://us-east-1.console.aws.amazon.com/ecr/repositories) repository for your function
+
+### Terraform/AWS initialization
+* We're using the following AWS components:
+
+| Resource               | Description                                   |
+|------------------------|-----------------------------------------------|
+| IAM      | Roles/permissions for execution          |
+| [ECR](https://us-east-1.console.aws.amazon.com/ecr/repositories)  | Storage for Lambda images          |
+| [Lambda](https://us-east-1.console.aws.amazon.com/lambda/)  | Function/container from ECR image          |
+| [API Gateway](https://us-east-1.console.aws.amazon.com/apigateway/main/apis)  | Lambda proxy integration and stage          |
+
+* It's recommended to use infra-as-code solution like [Terraform](https://registry.terraform.io/providers/hashicorp/aws/latest/docs) to describe/apply application (AWS) resources, though I'll provide manual steps also
+* To initialize AWS resources via Terraform:
+	* Navigate to `terraform/` in the project root
+	* `cd` to a function folder and run `terraform init`
+	* Review `terraform plan`, then `terraform apply`
+	* The ECR repository we've created is empty, so you'll see `InvalidParameterValueException: [...] Provide a valid source image`:
+	* Push an image to your new ECR repo and run `terraform apply` again
+	* All components should be created in your AWS environment now
+* Or manually initialize components in AWS Console by doing the following:
+	* Create ECR repository for your function
 	* Push application image to your new ECR repository
-	* Create [Lambda](https://us-east-1.console.aws.amazon.com/lambda/) function with "Container image" option
-		* "Browse images", select the image you just pushed
+	* Create Lambda function with "Container image" option
+		* "Browse images", then select the image you just pushed
 		* `arm64` architecture if you built the image on an M1 Mac 
-	* Create [API Gateway](https://us-east-1.console.aws.amazon.com/apigateway/main/apis) REST API
+	* Create API Gateway REST API
 		* Create resource
 		* Configure as proxy resource
 		* Integration type: Lambda Function Proxy
 		* Select your Lambda Function
+	* Deploy API to Stage for production endpoint
 
 ### Development workflow
 * Build image and run container
