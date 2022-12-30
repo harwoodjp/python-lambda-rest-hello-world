@@ -5,7 +5,7 @@ from aws_lambda_powertools.utilities.typing import LambdaContext
 logger = Logger()
 app = APIGatewayRestResolver()
 
-@app.get("/reverse/<string>")
+@app.post("/reverse/<string>")
 def reverse(string: str) -> dict:
     response = {"result": string[::-1]}
     return response
