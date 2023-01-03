@@ -3,10 +3,11 @@ How to create a (testable, monitorable) Python REST API with Lambda, Docker, and
 
 1. [Setup](#setup)
 2. [Terraform](#terraform)
-3. [Development](#development)
-4. [Testing](#testing)
-5. [Debugging](#debugging)
-6. [Monitoring](#monitoring)
+3. [Project](#project)
+4. [Development](#development)
+5. [Testing](#testing)
+6. [Debugging](#debugging)
+7. [Monitoring](#monitoring)
 
 ### Setup
 * Install and configure [Docker](https://docs.docker.com/desktop/install/mac-install/)
@@ -59,8 +60,26 @@ How to create a (testable, monitorable) Python REST API with Lambda, Docker, and
 	* Deploy API to Stage for production endpoint
 
 
-### Project structure
-* TODO: fill in project structure
+### Project
+Directory structure:
+
+| Folder               | Description                                   |
+|------------------------|-----------------------------------------------|
+| bin      | Scripts for development, deployment, and CI/CD          |
+| functions  | Containerized lambda functions          |
+| lib  | Library code for use in functions          |
+| terraform  | AWS infrastructure-as-code          |
+| tests  | Tests for functions and lib          |
+
+Example functions:
+* `hello_world`, `string_reverser`
+	* Demonstrates basic application structure
+	* CloudWatch integration via AWS Lambda Powertools
+* `write_dynamo`
+	* Writes to DynamoDB, `boto3` configured from `.env`
+	* Imports `dynamo_client` from `lib/` 
+	    * Using DI (method) for testability (see `tests/functions/write_dynamo/test_app.py`)
+	
 
 ### Development
 * Basic development workflow
