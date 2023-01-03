@@ -61,8 +61,7 @@ How to create a (testable, monitorable) Python REST API with Lambda, Docker, and
 
 
 ### Project
-Directory structure:
-
+Directory structure
 | Folder               | Description                                   |
 |------------------------|-----------------------------------------------|
 | bin      | Scripts for development, deployment, and CI/CD          |
@@ -71,53 +70,54 @@ Directory structure:
 | terraform  | AWS infrastructure-as-code          |
 | tests  | Tests for functions and lib          |
 
-Example functions:
+Example functions
 * `hello_world`, `string_reverser`
 	* Demonstrates basic application structure
 	* CloudWatch integration via AWS Lambda Powertools
 * `write_dynamo`
 	* Writes to DynamoDB, `boto3` configured from `.env`
 	* Imports `dynamo_client` from `lib/` 
-	    * Using DI (method) for testability (see `tests/functions/write_dynamo/test_app.py`)
+	    * Using DI (method injection) for testability (see `tests/functions/write_dynamo/test_app.py`)
 	
 
 ### Development
-* Basic development workflow
-    * Start container
-	* Make modifications to function
-	* Test locally (via `pytest` and RIE requests)
-	* Build image
-	* Tag image
-	* Push to ECR
-	* Refresh Lambda with latest image
-	* Deploy API to stage
-* Commands (also in `bin/`)
-	* Build image and run container
-  	    * ```
-    	    docker-compose up --build  
-    	    ```
-	* Tag image with ECR URL
-	  * ```
-	    docker tag [FUNCTION NAME]:latest \
-	    [ACCOUNT ID].dkr.ecr.us-east-1.amazonaws.com/[FUNCTION NAME]:latest
+Basic development workflow
+* Start container
+* Make modifications to function
+* Test locally (via `pytest` and RIE requests)
+* Build image
+* Tag image
+* Push to ECR
+* Refresh Lambda with latest image
+* Deploy API to stage
+
+Commands (also in `bin/`)
+* Build image and run container
+	    * ```
+	    docker-compose up --build  
 	    ```
-	* Push image to ECR
-	  * ```
-	    docker push [ACCOUNT ID].dkr.ecr.us-east-1.amazonaws.com/[FUNCTION NAME]:latest
-	    ```
-	* Refresh Lambda with latest image
-		* ```
-	    	aws lambda update-function-code \
-	        --function-name [FUNCTION NAME] \
-	        --image-uri [ACCOUNT ID].dkr.ecr.us-east-1.amazonaws.com/string-reverser:latest
-	      ```
-	* Deploy API to API Gateway Stage
-		* ``` 
-		    aws apigateway create-deployment \
-		   --region [REGION] \
-		   --rest-api-id [REST API ID] \
-		   --stage-name [REST API STAGE NAME]
-	       ```
+* Tag image with ECR URL
+  * ```
+    docker tag [FUNCTION NAME]:latest \
+    [ACCOUNT ID].dkr.ecr.us-east-1.amazonaws.com/[FUNCTION NAME]:latest
+    ```
+* Push image to ECR
+  * ```
+    docker push [ACCOUNT ID].dkr.ecr.us-east-1.amazonaws.com/[FUNCTION NAME]:latest
+    ```
+* Refresh Lambda with latest image
+	* ```
+    	aws lambda update-function-code \
+        --function-name [FUNCTION NAME] \
+        --image-uri [ACCOUNT ID].dkr.ecr.us-east-1.amazonaws.com/string-reverser:latest
+      ```
+* Deploy API to API Gateway Stage
+	* ``` 
+	    aws apigateway create-deployment \
+	   --region [REGION] \
+	   --rest-api-id [REST API ID] \
+	   --stage-name [REST API STAGE NAME]
+       ```
 
 ### Testing
 * Run unit tests
