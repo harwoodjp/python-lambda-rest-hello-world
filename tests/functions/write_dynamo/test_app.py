@@ -1,8 +1,9 @@
 import json
 from unittest.mock import Mock
 
-from functions.write_dynamo.app import write
 from lib.dynamo_client import DynamoClient
+
+from functions.write_dynamo.app import write
 
 
 def test_write_returns_item():

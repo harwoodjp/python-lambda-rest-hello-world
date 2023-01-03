@@ -1,10 +1,13 @@
 import json
-
+import os
 from functions.string_reverser.app import handler, reverse
+
+path = os.path.dirname(os.path.realpath(__file__))
+file = open(f"{path}/events/success.json", "r")
+event = json.loads(file.read())
 
 
 def test_handler():
-    event = {"resource": "/reverse", "path": "/reverse/backwards", "httpMethod": "GET"}
     response = handler(event, None)
     body = json.loads(response.get("body"))
     result = body.get("result")
