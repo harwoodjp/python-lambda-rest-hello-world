@@ -1,0 +1,6 @@
+{
+  "resource": "/reverse",
+  "path": "/reverse/foo",
+  "httpMethod": "GET",
+  "body": "{}"
+}

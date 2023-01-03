@@ -6,7 +6,7 @@ logger = Logger()
 app = APIGatewayRestResolver()
 
 
-@app.post("/reverse/<string>")
+@app.get("/reverse/<string>")
 def reverse(string: str) -> dict:
     response = {"result": string[::-1]}
     return response

@@ -103,7 +103,7 @@ How to create a (testable, monitorable) Python REST API with Lambda, Docker, and
 ### Testing
 * Run unit tests
 	* `pytest` for assertions/coverage
-	* `docker exec -it [FUNCTION NAME] sh -c "pytest test.py"`
+	* `docker exec -it [FUNCTION NAME] sh -c "pytest"`
 * Invoke HTTP event (request) locally with [RIE](https://docs.aws.amazon.com/lambda/latest/dg/images-test.html)
 	* curl: `bin/request_local.sh`
 	* Event body: `bin/request_local_body.json`

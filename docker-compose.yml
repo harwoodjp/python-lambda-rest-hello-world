@@ -10,16 +10,18 @@ services:
       - "6900:6900"
     volumes:
       - ./functions/hello-world:/var/task
-  string-reverser:
-    build: functions/string-reverser/
-    image: string-reverser:latest
-    container_name: string-reverser    
+  string_reverser:
+    build: functions/string_reverser/
+    image: string_reverser:latest
+    container_name: string_reverser    
     working_dir: /var/task
     ports:
       - "9001:8080"
       - "6900:6900"
     volumes:
-      - ./functions/string-reverser:/var/task
+      - ./lib/:/var/task/lib
+      - ./tests/functions/string_reverser:/var/task/tests/functions/string_reverser
+      - ./functions/string_reverser:/var/task/functions/string_reverser     
   write_dynamo:
     build: functions/write_dynamo/
     image: write_dynamo:latest

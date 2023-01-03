@@ -1,6 +1,6 @@
 import json
 
-from app import handler, reverse
+from functions.string_reverser.app import handler, reverse
 
 
 def test_handler():
