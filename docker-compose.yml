@@ -20,15 +20,17 @@ services:
       - "6900:6900"
     volumes:
       - ./functions/string-reverser:/var/task
-  write-dynamo:
-    build: functions/write-dynamo/
-    image: write-dynamo:latest
-    container_name: write-dynamo    
+  write_dynamo:
+    build: functions/write_dynamo/
+    image: write_dynamo:latest
+    container_name: write_dynamo    
     working_dir: /var/task
     env_file:
-      - functions/write-dynamo/.env
+      - functions/write_dynamo/.env
     ports:
       - "9002:8080"
       - "6900:6900"
     volumes:
-      - ./functions/write-dynamo:/var/task      
+      - ./lib/:/var/task/lib
+      - ./tests/functions/write_dynamo:/var/task/tests/functions/write_dynamo
+      - ./functions/write_dynamo:/var/task/functions/write_dynamo   

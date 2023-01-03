@@ -1,5 +1,6 @@
 {
-  "resource": "/hello",
-  "path": "/hello/Justin",
-  "httpMethod": "GET"
+  "resource": "/write",
+  "path": "/write",
+  "httpMethod": "POST",
+  "body": "{\"message\": \"Hello, world2\"}"
 }
