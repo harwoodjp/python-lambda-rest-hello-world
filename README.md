@@ -58,6 +58,10 @@ How to create a (testable, monitorable) Python REST API with Lambda, Docker, and
 		* Select your Lambda Function
 	* Deploy API to Stage for production endpoint
 
+
+### Project structure
+* TODO: fill in project structure
+
 ### Development
 * Basic development workflow
     * Start container
