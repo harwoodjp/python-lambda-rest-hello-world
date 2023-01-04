@@ -65,7 +65,7 @@ Directory structure
 | Folder               | Description                                   |
 |------------------------|-----------------------------------------------|
 | bin      | Scripts for development, deployment, and CI/CD          |
-| functions  | Containerized lambda functions          |
+| functions  | Containerized Lambda functions          |
 | lib  | Library code for use in functions          |
 | terraform  | AWS infrastructure-as-code          |
 | tests  | Tests for functions and lib          |
