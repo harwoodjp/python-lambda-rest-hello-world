@@ -18,7 +18,7 @@ How to create a (testable, monitorable) Python REST API with Lambda, Docker, and
 	    aws ecr get-login-password \
 	    --region [REGION] | docker login \
 	    --username AWS \
-	    --password-stdin [ACCOUNT ID].dkr.ecr.us-east-1.amazonaws.com
+	    --password-stdin [ACCOUNT ID].dkr.ecr.[REGION]amazonaws.com
 	    ```
 * For Terraform development, ensure the following environmental variables are in your path:
 
@@ -99,17 +99,17 @@ Commands (also in `bin/`)
 * Tag image with ECR URL
   * ```
     docker tag [FUNCTION NAME]:latest \
-    [ACCOUNT ID].dkr.ecr.us-east-1.amazonaws.com/[FUNCTION NAME]:latest
+    [ACCOUNT ID].dkr.ecr.[REGION].amazonaws.com/[FUNCTION NAME]:latest
     ```
 * Push image to ECR
   * ```
-    docker push [ACCOUNT ID].dkr.ecr.us-east-1.amazonaws.com/[FUNCTION NAME]:latest
+    docker push [ACCOUNT ID].dkr.ecr.[REGION].amazonaws.com/[FUNCTION NAME]:latest
     ```
 * Refresh Lambda with latest image
 	* ```
     	aws lambda update-function-code \
         --function-name [FUNCTION NAME] \
-        --image-uri [ACCOUNT ID].dkr.ecr.us-east-1.amazonaws.com/string-reverser:latest
+        --image-uri [ACCOUNT ID].dkr.ecr.[REGION].amazonaws.com/string-reverser:latest
       ```
 * Deploy API to API Gateway Stage
 	* ``` 
