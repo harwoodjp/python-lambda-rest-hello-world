@@ -3,8 +3,8 @@ How to create a (testable, monitorable) Python REST API with Lambda, Docker, and
 
 1. [Setup](#setup)
 2. [Infrastructure](#terraform)
-    a. [Terraform](#terraform)
-    b. [AWS Console](#aws-console)
+    - [Terraform](#terraform)
+    - [AWS Console](#aws-console)
 3. [Project](#project)
 4. [Development](#development)
 5. [Testing](#testing)
@@ -48,7 +48,8 @@ How to create a (testable, monitorable) Python REST API with Lambda, Docker, and
 * Navigate to `terraform/` in the project root
 * `cd` to a function folder and run `terraform init`
 * Review `terraform plan`, then `terraform apply`
-* On first `apply`, the ECR repository is empty, so you'll see `InvalidParameterValueException: [...] Provide a valid source image`:
+* On first `apply`, the ECR repository is empty, so you'll see:
+	`InvalidParameterValueException: [...] Provide a valid source image`:
 * Push an image to your new ECR repo and run `terraform apply` again
 * All components should be present in your AWS environment now
 
