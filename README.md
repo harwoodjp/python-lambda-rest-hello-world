@@ -2,7 +2,9 @@
 How to create a (testable, monitorable) Python REST API with Lambda, Docker, and Terraform. The example functions use [AWS Lambda Powertools](https://awslabs.github.io/aws-lambda-powertools-python/2.5.0/) for API Gateway and CloudWatch integration.
 
 1. [Setup](#setup)
-2. [Terraform](#terraform)
+2. [Infrastructure](#terraform)
+    a. [Terraform](#terraform)
+    b. [AWS Console](#aws-console)
 3. [Project](#project)
 4. [Development](#development)
 5. [Testing](#testing)
@@ -28,7 +30,7 @@ How to create a (testable, monitorable) Python REST API with Lambda, Docker, and
 | AWS_SECRET_ACCESS_KEY  | Secret key for Terraform development          |
 
 
-### Terraform
+### Infrastructure
 * We're using the following AWS components:
 
 | Resource               | Description                                   |
@@ -38,26 +40,31 @@ How to create a (testable, monitorable) Python REST API with Lambda, Docker, and
 | [Lambda](https://us-east-1.console.aws.amazon.com/lambda/)  | Serverless function built from ECR image          |
 | [API Gateway](https://us-east-1.console.aws.amazon.com/apigateway/main/apis)  | Lambda proxy integration and stage          |
 
-* It's recommended to use infra-as-code solution like [Terraform](https://registry.terraform.io/providers/hashicorp/aws/latest/docs) to describe/apply application (AWS) resources, though I'll provide manual steps also
-* To initialize AWS resources via Terraform:
-	* Navigate to `terraform/` in the project root
-	* `cd` to a function folder and run `terraform init`
-	* Review `terraform plan`, then `terraform apply`
-	* On first `apply`, the ECR repository is empty, so you'll see `InvalidParameterValueException: [...] Provide a valid source image`:
-	* Push an image to your new ECR repo and run `terraform apply` again
-	* All components should be present in your AWS environment now
-* Or manually initialize components in AWS Console by doing the following:
-	* Create ECR repository for your function
-	* Push application image to your new ECR repository
-	* Create Lambda function with "Container image" option
-		* "Browse images", then select the image you just pushed
-		* `arm64` architecture if you built the image on a silicon Mac 
-	* Create API Gateway REST API
-		* Create resource
-		* Configure as proxy resource
-		* Integration type: Lambda Function Proxy
-		* Select your Lambda Function
-	* Deploy API to Stage for production endpoint
+* It's recommended to use infra-as-code solution like [Terraform](https://registry.terraform.io/providers/hashicorp/aws/latest/docs) to describe/apply application (AWS) resources
+* Manual steps for creating infra in [AWS Console](https://console.aws.amazon.com/console/home) provided as well
+
+#### Terraform
+
+* Navigate to `terraform/` in the project root
+* `cd` to a function folder and run `terraform init`
+* Review `terraform plan`, then `terraform apply`
+* On first `apply`, the ECR repository is empty, so you'll see `InvalidParameterValueException: [...] Provide a valid source image`:
+* Push an image to your new ECR repo and run `terraform apply` again
+* All components should be present in your AWS environment now
+
+#### AWS Console
+
+* Create ECR repository for your function
+* Push application image to your new ECR repository
+* Create Lambda function with "Container image" option
+	* "Browse images", then select the image you just pushed
+	* `arm64` architecture if you built the image on a silicon Mac 
+* Create API Gateway REST API
+	* Create resource
+	* Configure as proxy resource
+	* Integration type: Lambda Function Proxy
+	* Select your Lambda Function
+* Deploy API to Stage for production endpoint
 
 
 ### Project
@@ -93,9 +100,9 @@ Basic development workflow
 
 Commands (also in `bin/`)
 * Build image and run container
-	    * ```
-	    docker-compose up --build  
-	    ```
+  * ```
+    docker-compose up --build  
+    ```
 * Tag image with ECR URL
   * ```
     docker tag [FUNCTION NAME]:latest \
