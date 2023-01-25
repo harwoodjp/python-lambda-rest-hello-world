@@ -1,15 +1,13 @@
 
 How to create a (testable, monitorable) Python REST API with Lambda, Docker, and Terraform. The example functions use [AWS Lambda Powertools](https://awslabs.github.io/aws-lambda-powertools-python/2.5.0/) for API Gateway and CloudWatch integration.
 
-1. [Setup](#setup)
-2. [Infrastructure](#terraform)
-    - [Terraform](#terraform)
-    - [AWS Console](#aws-console)
-3. [Project](#project)
-4. [Development](#development)
-5. [Testing](#testing)
-6. [Debugging](#debugging)
-7. [Monitoring](#monitoring)
+* [Setup](#setup)
+* [Infrastructure](#terraform)
+* [Project](#project)
+* [Development](#development)
+* [Testing](#testing)
+* [Debugging](#debugging)
+* [Monitoring](#monitoring)
 
 ### Setup
 * Install and configure [Docker](https://docs.docker.com/desktop/install/mac-install/)
